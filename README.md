@@ -1,3 +1,33 @@
+# SPN NextFlow Pipeline Test Useage
+
+## NextFlow Installation
+Requirements (from https://www.nextflow.io/docs/latest/getstarted.html);  
+Nextflow can be used on any POSIX compatible system (Linux, OS X, etc).  
+It requires Bash 3.2 (or later) and Java 11 (or later, up to 18) to be installed.  
+
+Install easily by downloading the necessary files, and then moving the `nextflow` binary to a directory within your `$PATH` (/usr/bin or other);  
+`wget -qO- https://get.nextflow.io | bash`  
+`chmod +x nextflow` 
+
+## Docker Installation
+Please follow install instructions on https://docs.docker.com/engine/install/ pertaining to your Linux distribution (CentOS, RedHat, Ubuntu, etc.)
+
+## Setup
+Alter the nextflow.config file with correct full paths to the following;  
+NOTE: You can alter these paths as long as they point to the correct resources (results_dir needs a blank output dir)   
+`params {`    
+    `read_dir = "<full_path_with_raw_reads>"`  
+    `results_dir = "<full_path_to_git_repo>/test_out"`  
+    `script_dir = "<full_path_to_git_repo>/spnpipelinecontainer"`  
+    `db_dir = "<full_path_to_git_repo>/spnpipelinecontainer/SPN_Reference_DB"`  
+`}`  
+
+For testing, raw reads are expected to be in Illumina format PE `*R[1,2]_001.fastq.gz` within `results_dir`      
+
+## Useage  
+Run the following command and you should begin to see processes queue on your screen. 
+`nextflow run main.nf`  
+
 # CDCgov GitHub Organization Open Source Project Template
 
 **Template for clearance: This project serves as a template to aid projects in starting up and moving through clearance procedures. To start, create a new repository and implement the required [open practices](open_practices.md), train on and agree to adhere to the organization's [rules of behavior](rules_of_behavior.md), and [send a request through the create repo form](https://forms.office.com/Pages/ResponsePage.aspx?id=aQjnnNtg_USr6NJ2cHf8j44WSiOI6uNOvdWse4I-C2NUNk43NzMwODJTRzA4NFpCUk1RRU83RTFNVi4u) using language from this template as a Guide.**
