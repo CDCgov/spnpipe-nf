@@ -21,8 +21,9 @@ NOTE: You can alter these paths as long as they point to the correct resources (
     `script_dir = "<full_path_to_git_repo>/spnpipelinecontainer"`  
     `db_dir = "<full_path_to_git_repo>/spnpipelinecontainer/SPN_Reference_DB"`  
 `}`  
-
-For testing, raw reads are expected to be in Illumina format PE `*R[1,2]_001.fastq.gz` within `results_dir`      
+  
+NextFlow automatically parses read pairs into distinct results folder, so for testing this branch;  
+The pipeline expects Illumina format PE raw reads `*R[1,2]_001.fastq.gz` within `read_dir`  
 
 ## Useage  
 Run the following command and you should begin to see processes queue on your screen. 
