@@ -25,9 +25,17 @@ NOTE: You can alter these paths as long as they point to the correct resources (
 NextFlow automatically parses read pairs into distinct results folder, so for testing this branch;  
 The pipeline expects Illumina format PE raw reads `*R[1,2]_001.fastq.gz` within `read_dir`  
 
-## Useage  
+## Usage  
 Run the following command and you should begin to see processes queue on your screen. 
-`nextflow run main.nf`  
+`nextflow run main.nf`   
+When the pipeline is complete, you should be able to find: `TABLE_Isolate_Typing_results.txt` within your specified `results_dir`  
+
+NextFlow produces many intermediary files within it's default work directory. To remove them and free space on your system, you should use `nextflow clean -f` command to remove the latest run.  
+
+It can be useful to look through a work directory to see logs produced by NextFlow (use `ls -a`)  
+To resume analysis using cached data stored in existing work directories: `nextflow run main.nf -resume`   
+
+
 
 # CDCgov GitHub Organization Open Source Project Template
 
