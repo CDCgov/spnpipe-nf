@@ -10,11 +10,9 @@ process call_SPNserotype {
     path(scripts_dir)
 
     output:
-    tuple val(sample), path("${output_dir}/${sample}/SERO_${sample}*Final__results.txt"), emit: sero_out
+    tuple val(sample), file("${output_dir}/${sample}/SERO_${sample}*Final__results.txt"), emit: sero_out
 
     script:
-
-    //sero_ref = file("${allDB_dir}/SPN_Sero_Gene-DB_Final.fasta", checkIfExists:true)
 
     """
     "${scripts_dir}/bin/SPN_Serotyper.pl" \

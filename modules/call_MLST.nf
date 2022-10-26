@@ -10,7 +10,8 @@ process call_MLST {
     path(allDB_dir)
 
     output:
-    tuple val(sample), path("${output_dir}/${sample}/MLST_${sample}__mlst__Streptococcus_pneumoniae__results.txt"), path("${output_dir}/${sample}/MLST_${sample}__*.Streptococcus_pneumoniae.sorted.bam"), emit: mlst_out
+    //tuple val (sample), file("${output_dir}/${sample}/MLST_${sample}__mlst__Streptococcus_pneumoniae__results.txt"), file("${output_dir}/${sample}/MLST_${sample}__*.Streptococcus_pneumoniae.sorted.bam"), emit: mlst_out
+    tuple val(sample), file("${output_dir}/${sample}/MLST_${sample}__mlst__Streptococcus_pneumoniae__results.txt")
 
     script:
     """

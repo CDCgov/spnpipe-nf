@@ -9,7 +9,7 @@ process trim_reads {
     path(script_dir)
 
     output:
-    tuple val(sample), path("${output_dir}/${sample}/cutadapt_${sample}*.fastq"), emit: fastq
+    tuple val(sample), file("${output_dir}/${sample}/cutadapt_${sample}*.fastq"), emit: fastq
 
     script:
     """

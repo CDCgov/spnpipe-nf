@@ -6,6 +6,8 @@ use Data::Dumper;
 #use Getopt::Long;
 use Getopt::Std;
 use File::Basename;
+# Added for parsing path from $input for relative output in NextFlow
+use File::Spec;
 
 ###MODULE LOAD###
 #module load ncbi-blast+/2.2.30
@@ -57,7 +59,9 @@ my ($help, $input) = checkOptions( @ARGV);
 ###Subroutines###
 
 ###Start Doing Stuff###
-my $final_out = "velvet_qual_metrics.txt";
+# Parse output directory from full-path input of velvet log
+($volumes, $directory, $file) = File::Spec->splitpath($input)
+my $final_out = "${directory}/velvet_qual_metrics.txt";
 open ( my $finalOUT, ">>", $final_out ) or die "Could not open file $final_out: $!";
 #print $finalOUT "Sample,Contig_Num,N50,Longest_Contig,Total_Bases\n";
 open ( my $l_path, "<", $input ) or die "Could not open file '$input': $!";

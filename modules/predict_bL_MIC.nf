@@ -8,7 +8,7 @@ process predict_bL_MIC {
     path(scripts_dir)
 
     output:
-    tuple val(sample), path("${output_dir}/${sample}/BLACTAM_MIC_RF_with_SIR.txt")
+    tuple val(sample), file("${output_dir}/${sample}/BLACTAM_MIC_RF_with_SIR.txt")
 
     script:
     """
