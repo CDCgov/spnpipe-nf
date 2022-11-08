@@ -5,7 +5,6 @@ process cleanup_results {
 
     input:
     tuple val(sample), file(sero_results), file(mlst_results), file(bL_MIC), file(res_mic)
-    tuple val(sample), file(sero_results), file(mlst_results)
     path(output_dir)
 
     output:
