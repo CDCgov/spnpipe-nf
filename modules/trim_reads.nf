@@ -1,7 +1,7 @@
 process trim_reads {
 
     container 'genomicpariscentre/cutadapt:1.8.3'
-    //containerOptions = "--user root"
+    containerOptions = "--user root"
 
     input:
     tuple val(sample), file(fastq_in) 
