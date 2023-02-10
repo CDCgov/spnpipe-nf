@@ -1,6 +1,6 @@
 process fastqc_trimmed {
 
-    container 'biocontainers/fastqc:v0.11.5_cv4'
+    container 'glevdoug/fastqc_0.11.5:v1.0'
     containerOptions = "--user root"
 
     input:

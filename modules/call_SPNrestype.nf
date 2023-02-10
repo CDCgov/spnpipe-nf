@@ -1,5 +1,5 @@
 process call_SPNrestype {
-    container 'dreramos/spn-ubuntu:v8'
+    container 'dreramos/spn:v04'
     containerOptions = "--user root"
 
     input:
@@ -13,7 +13,7 @@ process call_SPNrestype {
 
     script:
     """
-    cp -r /home/builder/VelvetOptimiser-2.2.6/VelvetOpt/ /usr/local/lib/perl/5.18.2/
+    cp -r /opt/VelvetOptimiser-2.2.6/VelvetOpt/ /usr/share/perl/5.30.0
 
     "SPN_Res_Typer.pl" \
     -1 "${fastq_in.get(0)}" -2 "${fastq_in.get(1)}" \

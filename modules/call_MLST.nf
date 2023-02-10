@@ -1,6 +1,6 @@
 process call_MLST {
     
-    container 'dreramos/spn-ubuntu:v8'
+    container 'dreramos/spn:v04'
     containerOptions = "--user root"
 
 
@@ -10,9 +10,10 @@ process call_MLST {
     path(allDB_dir)
 
     output:
-    //tuple val (sample), file("${output_dir}/${sample}/MLST_${sample}__mlst__Streptococcus_pneumoniae__results.txt"), file("${output_dir}/${sample}/MLST_${sample}__*.Streptococcus_pneumoniae.sorted.bam"), emit: mlst_out
     tuple val(sample), file("${output_dir}/${sample}/MLST_${sample}__mlst__Streptococcus_pneumoniae__results.txt")
 
+    // TODO: Automate --threads to improve speed of srst2
+    // check ubiquity of grep -c ^processor /proc/cpuinfo 
     script:
     """
     srst2 --samtools_args '\\-A' --mlst_delimiter '_' \

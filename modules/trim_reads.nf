@@ -1,6 +1,6 @@
 process trim_reads {
 
-    container 'genomicpariscentre/cutadapt:1.8.3'
+    container 'glevdoug/cutadapt_1.8.3:v1.0'
     containerOptions = "--user root"
 
     input:

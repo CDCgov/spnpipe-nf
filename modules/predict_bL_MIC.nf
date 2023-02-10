@@ -1,5 +1,6 @@
 process predict_bL_MIC {
-    container 'dreramos/r-centos7:v01'
+    
+    container 'r-centos7_fix:latest'
     containerOptions = "--user root"
 
     input:
@@ -12,7 +13,7 @@ process predict_bL_MIC {
 
     script:
     """
-    # Cleanup temp dir used for NextFlow
+    # Cleanup temp dir
     if [ -d "${output_dir}/${sample}/temp_PBP" ]; then
         rm -r "${output_dir}/${sample}/temp_PBP"
     fi

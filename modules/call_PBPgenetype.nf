@@ -1,5 +1,5 @@
 process call_PBPgenetype {
-    container 'dreramos/spn-ubuntu:v8'
+    container 'dreramos/spn:v04'
     containerOptions = "--user root"
 
     input:
@@ -12,10 +12,8 @@ process call_PBPgenetype {
     tuple val(sample), path("${output_dir}/${sample}/temp_PBP/EXTRACT_*.fasta"), emit: pbp_extract
 
     script:
-    // Set variables for local files using $fh in perl scripts
-    
     """
-    cp -r /home/builder/VelvetOptimiser-2.2.6/VelvetOpt/ /usr/local/lib/perl/5.18.2/
+    cp -r /opt/VelvetOptimiser-2.2.6/VelvetOpt/ /usr/share/perl/5.30.0
 
     "PBP-Gene_Typer.pl" \
     -1 "\$PWD/${fastq_in.get(0)}" -2 "\$PWD/${fastq_in.get(1)}" \

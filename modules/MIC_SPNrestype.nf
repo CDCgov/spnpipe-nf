@@ -1,6 +1,6 @@
 process MIC_SPNrestype {
     
-    container 'dreramos/spn-ubuntu:v8'
+    container 'dreramos/spn:v04'
     containerOptions = "--user root"
 
     input:
