@@ -25,9 +25,14 @@ Build_PBP_AA_table<- function(datafolder, temp_path)
   #cmd0="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/bin/"
   #cmd1="clustalo "
   #cmd1=paste(temp_path, "/clustalo ")
-  cmd1=gsub(" ", "", paste(temp_path, "/bin/clustalo"))
-    # path to the "clustalo" software folder
-  
+  #cmd1=gsub(" ", "", paste(temp_path, "/bin/clustalo"))
+  #clean_clustal <- system(paste0("pwd -P ", temp_path))
+  clean_clustal <- normalizePath(temp_path)
+  print(clean_clustal)
+  #cmd1=gsub(" ", "", paste(clean_clustal, "/bin/clustalo"))
+  cmd1="clustalo"    
+  print(cmd1)
+
   # Get path to reference from relative path while removing whitespaces from paste
   refPBP3=gsub(" ", "", paste(temp_path, "/PBP_AA_to_MIC_newDB/Ref_PBP_3.faa"))
   seq1=readAAStringSet(refPBP3, format="fasta")
@@ -79,11 +84,21 @@ Build_PBP_AA_table<- function(datafolder, temp_path)
     {
       writeXStringSet(seqREF["PBP1A_SP0369_AA371-647"], file="tempSAM1A.faa")
       writeXStringSet(seq1A[j1], file="tempSAM1A.faa", , append=T  )
-    
-      cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
+      
+      #system("chown -R $USER:$USER ")
+      absoluteDir <- getwd()
+      print("ABOUT to run clustalo")
+      cmd2 <- paste0(" -i ", absoluteDir, "/tempSAM1A.faa -o ", absoluteDir, "/tempSAM1A.faa.aln --wrap=3000 --force --output-order=input-order")
       cmd3=paste(cmd1, cmd2, sep="")
       #cmd3=paste(cmd0, cmd1, cmd2, sep="")
-      system(cmd3)
+      print(cmd3)
+      test_in = paste0(absoluteDir, "/tempSAM1A.faa")
+      test_out = paste0(absoluteDir, "/tempSAM1A.faa.aln")
+      s2_args = c('-i', test_in, '-o', test_out, '--wrap=3000', '--force', '--output-order=input-order')
+      #s2_args = c('-i', test_in, '--wrap=3000', '--force', '--output-order=input-order', '>', test_out)
+      
+      system2(cmd1, s2_args, stdout = TRUE, stderr = TRUE)
+      print("RAN clustalo")
 
       seqTEMP2=readAAStringSet("tempSAM1A.faa.aln", format="fasta")
       x1=as.character(seqTEMP2["PBP1A_SP0369_AA371-647"][[1]])

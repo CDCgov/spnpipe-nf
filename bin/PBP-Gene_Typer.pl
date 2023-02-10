@@ -312,7 +312,7 @@ sub extractFastaByID {
 sub fasta_seq_length {
     my ($seq) = @_;
     my @lines = split /\n/, $seq;
-    my $final_line;
+    my $final_line = "";
     foreach my $line (@lines) {
         chomp($line);
         if ($line =~ /^>/) {

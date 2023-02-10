@@ -4,7 +4,7 @@
 
 PBP_AA_TO_MIC2<- function(cwd){
   dbdir=gsub(" ", "", paste(t_path, "/PBP_AA_to_MIC_newDB/"))
-  libpath=gsub(" ", "", paste(t_path, "/Rlib"))
+  libpath=gsub(" ", "", paste(t_path, "/bin"))
   #x1=.libPaths()
   x2=c(libpath, "/usr/lib64/R/library", "/usr/share/R/library")
   .libPaths(x2)
@@ -120,6 +120,9 @@ PBP_AA_TO_MIC2<- function(cwd){
 
   #Model fitting Random Forest MIC
   setwd(dbdir)
+  print("Cwd after switching to dbdir in AAtable_To_MIC*.R")
+  print(getwd())
+  print(dbdir)
 
   RFdbMIC=c("PEN_RandomForestMIC", "AMO_RandomForestMIC", "MER_RandomForestMIC",
 	  "TAX_RandomForestMIC", "CFT_RandomForestMIC", "CFX_RandomForestMIC")  

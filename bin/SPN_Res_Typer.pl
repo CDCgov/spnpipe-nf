@@ -305,8 +305,7 @@ sub freebayes_prior_fix {
     system("freebayes -q 20 -p 1 -f CHECK_target_ref.fna CHECK_target_seq.bam -v CHECK_target_seq.vcf");
     system("bgzip CHECK_target_seq.vcf");
     system("tabix -p vcf CHECK_target_seq.vcf.gz");
-    # TODO Refactor out hardpath for perl variable that works
-    my $extractSeq = `echo "$REF_seq" | ../../../vcf-consensus CHECK_target_seq.vcf.gz`;
+    my $extractSeq = `echo "$REF_seq" | vcf-consensus CHECK_target_seq.vcf.gz`;
     chomp($extractSeq);
     #print "$target-----------------------------------\n";
     #system("cat CHECK_target_seq.sam");

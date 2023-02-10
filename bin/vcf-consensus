@@ -190,6 +190,7 @@ sub apply_variant
     if ( !exists($$opts{sample_col}) )
     {
         # No sample requested, applying all sites, first ALT
+        ## Check here for "overcalling"
         my $idx;
         $alt = ($idx=index($$vline[4],','))==-1 ? $$vline[4] : substr($$vline[4],0,$idx);
         if ( exists($$opts{iupac}) && length($$vline[3])==1 && length($alt)==1 )

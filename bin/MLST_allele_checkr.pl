@@ -84,7 +84,7 @@ if (! $MLST_mismatch == 0) {
 	    system("freebayes -q 20 -p 1 -f $MLST_fna $MLST_bam -v $MLST_vcf");
 	    system("bgzip $MLST_vcf");
 	    system("tabix -p vcf $MLST_vcf.gz");
-	    my $MLST_consensus = `cat $MLST_fna | ../../../vcf-consensus $MLST_vcf.gz`;
+	    my $MLST_consensus = `cat $MLST_fna | vcf-consensus $MLST_vcf.gz`;
 	    #print "MLST consensus:\n$MLST_consensus\n\n";
 	    #print "MLST pileup:\n$pileup_allele\n";
 	    print $exFile_out "New MLST Allele Consensus:\n$MLST_consensus\n";

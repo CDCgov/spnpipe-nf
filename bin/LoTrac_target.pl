@@ -240,16 +240,25 @@ if( -d "./velvet_output") {
 }
 
 print "Beginning Prodigal\n";
-# This can break the script if empty prodigal files are created from empty velvet output
-if (glob("prodigal_$outName*")) {
-    print "Gene prediction has already been completed\n";
-} else {
-    system("prodigal -c -f gff -i ./velvet_output/contigs.fa -a PRE_$outName.faa -o prodigal_$outName.gff -d PRE_$outName.fasta");
-    `cat PRE_"$outName".faa | sed 's/ # .*//g' > prodigal_"$outName".faa`;
-    `cat PRE_"$outName".fasta | sed 's/ # .*//g' > prodigal_"$outName".fna`;
-    unlink("PRE_$outName.faa");
-    unlink("PRE_$outName.fasta");
-}
+# This can break PBP results if pre-existing empty prodigal files exist from velvet error
+# TODO: Adjust logic in cleanup script to remove unecessary intermediary files (can make a flag to keep files such as --debug true)
+
+# Testing for glob break (may return true even if false)
+#if (glob("prodigal_$outName*")) {
+#    print "Gene prediction has already been completed\n";
+#} else {
+#    system("prodigal -c -f gff -i ./velvet_output/contigs.fa -a PRE_$outName.faa -o prodigal_$outName.gff -d PRE_$outName.fasta");
+#    `cat PRE_"$outName".faa | sed 's/ # .*//g' > prodigal_"$outName".faa`;
+#    `cat PRE_"$outName".fasta | sed 's/ # .*//g' > prodigal_"$outName".fna`;
+#    unlink("PRE_$outName.faa");
+#    unlink("PRE_$outName.fasta");
+#}
+system("prodigal -c -f gff -i ./velvet_output/contigs.fa -a PRE_$outName.faa -o prodigal_$outName.gff -d PRE_$outName.fasta");
+`cat PRE_"$outName".faa | sed 's/ # .*//g' > prodigal_"$outName".faa`;
+`cat PRE_"$outName".fasta | sed 's/ # .*//g' > prodigal_"$outName".fna`;
+unlink("PRE_$outName.faa");
+unlink("PRE_$outName.fasta");
+
 
 print "Create a blast database using the predicted genes obtained from Prodigal\n";
 if (glob("TEMP_prod_nucl_blast_db*")) {
