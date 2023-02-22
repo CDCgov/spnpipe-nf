@@ -1,6 +1,6 @@
 process predict_bL_MIC {
     
-    container 'r-centos7_fix:latest'
+    container 'glevdoug/r-centos07_spn:v1.1'
     containerOptions = "--user root"
 
     input:
