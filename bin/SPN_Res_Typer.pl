@@ -1,9 +1,7 @@
 #!/usr/bin/env perl
 
 use strict;
-#use warnings;
 use Data::Dumper;
-#use Getopt::Long;
 use Getopt::Std;
 use File::Copy qw(copy);
 use Env;
@@ -11,17 +9,8 @@ use lib $ENV{MODULESHOME}."/init";
 use Cwd;
 use File::Spec;
 use lib File::Spec->catdir((File::Spec->updir) x 3)."/perl_libs/perl";
-# TODO: find elegant solution to use $ARGV[]
-#use lib $ENV{temp_path}."/perl_libs/perl";
-#use perl;
 
 print Dumper \%INC;
-
-###MODULE LOAD###
-#module load samtools/0.1.18
-#module load bowtie2/2.1.0
-#module load Python/2.7
-#module load freebayes/0.9.21
 
 sub checkOptions {
     my %opts;
@@ -115,17 +104,6 @@ sub checkOptions {
         print "The default output file name prefix is: $outName";
     }
 
-    ## Adding in option for relative temp_path variable from Typer.sh
-    #if($opts{t}) {
-    #    $temp_path = $opts{t};
-	#chomp($temp_path);
-    #    print "The temp path for dependencies: $temp_path\n";
-    #} else {
-    #    print "The temp path variable from Typer.sh is not provided. Please look at ~line 98 where this script is invoked.\n";
-    #    help();
-    #}
-
-
     return ($help, $fastq1, $fastq2, $ref_dir, $res_DB, $outDir, $outName);
 }
 
@@ -147,12 +125,8 @@ SPN_Res_Typer.pl -1 <forward fastq file: fastq> -2 <reverse fastq file: fastq> -
 
 EOF
 }
-
+# Setting input options passed from call_SPNrestype.nf
 my ($help, $fastq1, $fastq2, $ref_dir, $res_DB, $outDir, $outName) = checkOptions( @ARGV );
-
-
-
-
 
 ###Subroutines###
 sub sixFrame_Translate {
@@ -291,6 +265,7 @@ sub extractFastaByID {
 }
 
 sub freebayes_prior_fix {
+    # Example call: freebayes_prior_fix($RES_bam, $res_DB,"10__PARC__PARC-12__10")
     my ($bamFile, $refFile, $target) = @_;
     (my $samFile = $bamFile) =~ s/\.bam/\.sam/g;
     system("samtools view -h $bamFile > $samFile");
@@ -302,17 +277,14 @@ sub freebayes_prior_fix {
     open(my $rf,'>',"CHECK_target_ref.fna");
     print $rf "$REF_seq\n";
     close $rf;
+    # Issues if CHECK_target is not removed and an errant .fna.fai index throws off freebayes
+    # Would be ideal to handle temporary file parsing in NextFlow
     system("freebayes -q 20 -p 1 -f CHECK_target_ref.fna CHECK_target_seq.bam -v CHECK_target_seq.vcf");
     system("bgzip CHECK_target_seq.vcf");
     system("tabix -p vcf CHECK_target_seq.vcf.gz");
     my $extractSeq = `echo "$REF_seq" | vcf-consensus CHECK_target_seq.vcf.gz`;
     chomp($extractSeq);
-    #print "$target-----------------------------------\n";
-    #system("cat CHECK_target_seq.sam");
-    #system("zcat CHECK_target_seq.vcf.gz");
-    #print "reference seq:\n$REF_seq\n";
-    #print "extracted Seq:\n$extractSeq\n";
-    #print "$target-----------------------------------\n";
+    # Cleanup intermediary files so that each res target doesn't pull data from a previous target
     system("rm CHECK_target*");
     return $extractSeq;
 }
@@ -917,30 +889,12 @@ if ($Res_Targets{"R23S2"} eq "pos") {
 ###############################################################################################
 ###Type the FOLP-1 Sulfonamide resistance target###
 my $target = "1__FOLP__FOLP-1__1";
-#my @TEMP_FOLP_bam = glob("FOLP_*\.sorted\.bam");
-#my $bamFile = $TEMP_FOLP_bam[0];
-#(my $samFile = $bamFile) =~ s/\.bam/\.sam/g;
-#system("samtools view -h $bamFile > $samFile");
-#system("cat $samFile | grep -E \"^\@HD|^\@SQ.*$target|^\@PG\" > FOLP_target_seq.sam");
-#system("awk -F'\t' '\$3 == \"$target\" {print \$0}' $samFile >> FOLP_target_seq.sam");
-#system("samtools view -bS FOLP_target_seq.sam > FOLP_target_seq.bam");
-#system("samtools index FOLP_target_seq.bam FOLP_target_seq.bai");
 
-#module "load bowtie2/2.1.0";
-#module "load samtools/0.1.18";
 system("bowtie2 -1 $fastq1 -2 $fastq2 --very-sensitive-local --no-unal -a -x $ref_dir/SPN_FOLP_Gene-DB_Final.fasta -S FOLP_target_seq.sam");
 system("samtools view -bS FOLP_target_seq.sam | samtools sort - FOLP_target_seq_sort");
 system("samtools index FOLP_target_seq_sort.bam");
 system("freebayes -q 25 -p1 -f $ref_dir/SPN_FOLP_Gene-DB_Final.fasta FOLP_target_seq_sort.bam -v FOLP_target_seq.vcf");
-#system("vcffilter -f 'QUAL > 100 & DP > 25' -g 'GQ > 30 & AO > 20 & GT = 1' TEMP_FOLP_target_seq.vcf > FOLP_target_seq.vcf");
-#module "unload bowtie2/2.1.0";
-#module "unload samtools/0.1.18";
 
-#$REF_seq = extractFastaByID("$target","$ref_dir/SPN_FOLP_Gene-DB_Final.fasta");
-#open(my $rf,'>',"FOLP_target_ref.fna");
-#print $rf "$REF_seq\n";
-#close $rf;
-#system("freebayes -q 20 -p 1 -f FOLP_target_ref.fna FOLP_target_seq.bam -v FOLP_target_seq.vcf");
 open(MYINPUTFILE, "FOLP_target_seq.vcf");
 my %srst2_seroT;
 while(<MYINPUTFILE>) {

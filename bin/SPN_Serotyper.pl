@@ -5,12 +5,6 @@ use warnings;
 use Data::Dumper;
 use Getopt::Std;
 
-###MODULE LOAD###
-#module load perl/5.12.3
-#module load ncbi-blast+/2.2.29
-#module load BEDTools/2.17.0
-#module load Python/2.7
-
 sub checkOptions {
     my %opts;
     getopts('h1:2:r:o:n:', \%opts);
@@ -150,14 +144,9 @@ sub freebayes_prior_fix {
     system("freebayes -q 20 -p 1 -f CHECK_target_ref.fna CHECK_target_seq.bam -v CHECK_target_seq.vcf");
     system("bgzip CHECK_target_seq.vcf");
     system("tabix -p vcf CHECK_target_seq.vcf.gz");
-    my $extractSeq = `echo "$REF_seq" | ../../../vcf-consensus CHECK_target_seq.vcf.gz`;
+    my $extractSeq = `echo "$REF_seq" | vcf-consensus CHECK_target_seq.vcf.gz`;
     chomp($extractSeq);
-    #print "$target-----------------------------------\n";
-    #system("cat CHECK_target_seq.sam");
-    #system("zcat CHECK_target_seq.vcf.gz");
-    #print "reference seq:\n$REF_seq\n";
-    #print "extracted Seq:\n$extractSeq\n";
-    #print "$target-----------------------------------\n";
+
     system("rm CHECK_target*");
     return $extractSeq;
 }
@@ -195,16 +184,11 @@ while(<MYINPUTFILE>) {
         next;
     } else {
         if ($seroT_line[5] > 10) {
-            #my $newLine = "$seroT_line[2]:$seroT_line[3]:$seroT_line[4]:$seroT_line[5]:$seroT_line[6]:$seroT_line[7]";
-            #$srst2_seroT{$seroT_line[2]} = $newLine;
-	    my @newLine = ("$seroT_line[2]", "$seroT_line[3]", "$seroT_line[4]", "$seroT_line[5]", "$seroT_line[6]", "$seroT_line[7]");
-	    #push(@srst2ARR,\@newLine);
-	    $srst2{$seroT_line[2]} = \@newLine;
+            my @newLine = ("$seroT_line[2]", "$seroT_line[3]", "$seroT_line[4]", "$seroT_line[5]", "$seroT_line[6]", "$seroT_line[7]");
+	        $srst2{$seroT_line[2]} = \@newLine;
         }
     }
 }
-#print Dumper(\%srst2_seroT);
-#print Dumper(\%srst2HSH);
 
 my %singlTarg95 = ( 
     'WZY1' => '1', 'WZY2' => '2', 'WCHE3' => '3', 'WZY4' => '4', 'WZY5' => '5', 'WZY8' => '8', 'WCRG10A' => '10A', 'GTF10F' => '10F', 'WZY11A' => '11A', 'WZY11B:11C' => '11B/C', 
