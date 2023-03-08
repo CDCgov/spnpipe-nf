@@ -1,11 +1,19 @@
-# SPN NextFlow Pipeline Test Useage
+# SPN NextFlow Pipeline
+
+## Overview  
+
+This project is an ongoing effort to create a unified _Streptococcus pneumoniae_ bioinformatics pipeline 
+Ben Metcalf [pipeline](https://github.com/BenJamesMetcalf/Spn_Scripts_Reference) 
 
 ## NextFlow Installation
 Requirements (from https://www.nextflow.io/docs/latest/getstarted.html);  
 Nextflow can be used on any POSIX compatible system (Linux, OS X, etc).  
 It requires Bash 3.2 (or later) and Java 11 (or later, up to 18) to be installed.  
 
-Install easily by downloading the necessary files, and then moving the `nextflow` binary to a directory within your `$PATH` (/usr/bin or other);  
+Install easily by following below commands to; 
+1) Download/configure NextFlow
+2) Make the `nextflow` binary executable
+3) Move `nextflow` binary to a directory within your `$PATH` (/usr/bin or other)  
 
 `wget -qO- https://get.nextflow.io | bash`  
 `chmod +x nextflow` 
