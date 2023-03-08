@@ -120,11 +120,11 @@ then
     line=$(cat ${out_dir}/${sample}/velvet_output/velvet_qual_metrics.txt | tr ',' '\t')
     printf "$line\t" >> "$tabl_out"
 
-    printf "$readPair_1\t" >> "$tabl_out";
+    printf "$sample\t" >> "$tabl_out";
 
     echo "${out_dir}/${sample}/velvet_output/contigs.fa" >> "$tabl_out"
 else
-    printf "NA\tNA\tNA\tNA\t$readPair_1\tNA\n" >> "$tabl_out"
+    printf "NA\tNA\tNA\tNA\t$sample\tNA\n" >> "$tabl_out"
 fi
 
 cleanup_array=("*.pileup" "*.*sorted.*am" "*.scores" "*ARGannot_r1.*" "ARG-RESFI_fullgenes_results.txt" "BIN_Isolate_Typing_results.txt" "BLACTAM_MIC_RF_with_SIR.txt" "Serotype_Extraction_Sequence.fna" "velvet_qual_metrics.txt" "velvet_output/Sequences" "velvet_output/stats.txt" "velvet_output/Log" "BLACTAM_MIC_RF.txt" "RES-MIC*" "cutadapt_*_R*" "FOLP_target_*" "OUT_*" "TEMP_*" "velvet_output/*Graph*" "PBP_to_MIC_temp/" "*_R1_cut" "*_R2_cut")
@@ -155,5 +155,4 @@ do
     find "${out_dir}/${sample}" -maxdepth 1 -name "$i" -delete
 done
 echo "Successfully passed cleanup"
-
 exit
