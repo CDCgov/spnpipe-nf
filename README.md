@@ -28,8 +28,15 @@ Ensure Docker is running by entering `docker --version` in your command line int
 
 Input is expected as Illumina format paired-end raw reads `*R[1,2]_001.fastq.gz` or `*_{1,2}.fastq.gz` within `read_dir` 
 
-Provide your local directories as CLI arguments to run the pipeline;
-`nextflow run main.nf --read_dir </input/path> --results_dir </output/path> --script_dir </path/to/spnpipe-nf> --db_dir </path/to/SPN_Reference_DB/>`   
+Provide your local directories as CLI arguments to run the pipeline;  
+```
+nextflow run main.nf --read_dir </input/path> --results_dir </output/path> --script_dir </path/to/spnpipe-nf> --db_dir </path/to/spnpipe-nf/SPN_Reference_DB/>  
+```
+`--read_dir` is the path of your input raw reads  
+`--results_dir` is the path specified for output results  
+`--script_dir` is the path where this repository lives in your local machine  
+`--db_dir` is the path where the reference database lives 
+
 You should now see processes generate in your terminal.
 
 When the pipeline is complete, you should be able to find: `TABLE_Isolate_Typing_results.txt` within your specified `results_dir`  
@@ -38,7 +45,6 @@ When the pipeline is complete, you should be able to find: `TABLE_Isolate_Typing
 - NextFlow produces many intermediary files within it's default work directory. To remove them and free space on your system, you should use `nextflow clean -f` command to remove the latest run.  
 - It can be useful to look through a work directory to see logs produced by NextFlow (use `ls -a`)  
 - To resume analysis using cached data stored in existing work directories: `nextflow run main.nf -resume`   
-- `SPN_Reference_DB` is included in the repository and exists as an extra CLI argument for variable databases in testing
  
 ## Contributing + Standard Notices
 To contribute, please refer to [contributing to this repository](https://github.com/CDCgov/template/blob/master/CONTRIBUTING.md).  
