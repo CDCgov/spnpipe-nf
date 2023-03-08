@@ -2,8 +2,9 @@
 
 ## Overview  
 
-This project is an ongoing effort to create a unified _Streptococcus pneumoniae_ bioinformatics pipeline 
-Ben Metcalf [pipeline](https://github.com/BenJamesMetcalf/Spn_Scripts_Reference) 
+This project is an ongoing effort to create a unified _Streptococcus pneumoniae_ isolate and filtered-read identification + characterization pipeline. Each sample is characterized by assembly metrics, serotype, MLST and AMR predictions with an emphasis on beta-lactamase resistance genes. The original SPN pipeline, developed by the Strep Lab at the CDC, was refactored for env independence. NextFlow is the workflow manager used to create distinct analysis "modules" wrapped around custom Docker images to maintain software versions for all users. Most relatively modern consumer-level computers can run this pipeline as long as NextFlow and Docker are installed. 
+
+Original SPN pipeline developed by [Ben Metcalf](https://github.com/BenJamesMetcalf/Spn_Scripts_Reference).
 
 ## NextFlow Installation
 Requirements (from https://www.nextflow.io/docs/latest/getstarted.html);  
@@ -20,23 +21,24 @@ Install easily by following below commands to;
 `cp nextflow </path/in/your/$PATH>` 
 
 ## Docker Installation
-Please follow install instructions on https://docs.docker.com/engine/install/ pertaining to your Linux or MacOS distribution 
+Please follow install instructions on https://docs.docker.com/engine/install/ pertaining to your Linux/WSL or MacOS distribution 
 
 ## Usage  
-The pipeline expects Illumina format paired-end raw reads `*R[1,2]_001.fastq.gz` or `*_{1,2}.fastq.gz` within `read_dir` 
+Ensure Docker is running by entering `docker --version` in your command line interface. 
 
+Input is expected as Illumina format paired-end raw reads `*R[1,2]_001.fastq.gz` or `*_{1,2}.fastq.gz` within `read_dir` 
 
-Run the following command and you should begin to see processes queue on your screen. 
-`nextflow run main.nf `   
-
+Provide your local directories as CLI arguments to run the pipeline;
+`nextflow run main.nf --read_dir </input/path> --results_dir </output/path> --script_dir </path/to/spnpipe-nf> --db_dir </path/to/SPN_Reference_DB/>`   
+You should now see processes generate in your terminal.
 
 When the pipeline is complete, you should be able to find: `TABLE_Isolate_Typing_results.txt` within your specified `results_dir`  
 
-NextFlow produces many intermediary files within it's default work directory. To remove them and free space on your system, you should use `nextflow clean -f` command to remove the latest run.  
-
-It can be useful to look through a work directory to see logs produced by NextFlow (use `ls -a`)  
-To resume analysis using cached data stored in existing work directories: `nextflow run main.nf -resume`   
- 
+**Notes:**
+- NextFlow produces many intermediary files within it's default work directory. To remove them and free space on your system, you should use `nextflow clean -f` command to remove the latest run.  
+- It can be useful to look through a work directory to see logs produced by NextFlow (use `ls -a`)  
+- To resume analysis using cached data stored in existing work directories: `nextflow run main.nf -resume`   
+- `SPN_Reference_DB` is included in the repository and exists as an extra CLI argument for variable databases in testing
  
 ## Contributing + Standard Notices
 To contribute, please refer to [contributing to this repository](https://github.com/CDCgov/template/blob/master/CONTRIBUTING.md).  
