@@ -16,11 +16,22 @@ include { cleanup_results } from './modules/cleanup_results.nf'
 
 workflow {
     
-    // handle output directory 
-    // if not exist, then make based on execution directory         
+    // TODO: Improve conditional/error handling
+
+    // Catch missing output directory and exit before anything 
+    if (params.results_dir == ""){
+      println("Please specify a results directory with '--results_dir /path/to/out'")
+      System.exit(1)
+    }       
+
+    // Creates empty results directory if params.results_dir DNE
+    def out_dir = new File(params.results_dir)
+    if (!out_dir.exists()) {
+      out_dir.mkdir()
+    }
+
     raw_reads = params.read_dir
-    //"${raw_reads}/*R[1,2]_001.fastq.gz", 
-    // Set if logic to read *_{1,2}.fastq.gz OR R[1,2]_001.*
+    
     Channel
     .fromFilePairs( ["${raw_reads}/*R[1,2]_001.fastq.gz", "${raw_reads}/*_{1,2}.fastq.gz"], type: 'file' ) 
     //.fromPath(params.manifest, checkIfExists: true)
