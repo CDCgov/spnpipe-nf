@@ -1,11 +1,9 @@
 #!/bin/bash
+set -u
 
+# TODO: Reformat script into functions and better handling
 sample=$1
 out_dir=$2
-
-## Strep Lab designed each TABLE_Isolate_Typing_results.txt to be concatenated within wrapr.sh
-# iterate through results and print to final TABLE_SPN_<batch_name>_Typing_Results.txt
-# Could be missing logic from .wrapr.sh lines 170-186
 
 ###Output the emm type/MLST/drug resistance data for this sample to it's results output file###
 tabl_out="${out_dir}/TABLE_Isolate_Typing_results.txt"
@@ -23,7 +21,8 @@ WGS_DOX_SIGN\tWGS_DOX\tWGS_DOX_SIR\tFQ\tWGS_CIP_SIGN\tWGS_CIP\tWGS_CIP_SIR\tWGS_
 Other\tWGS_CHL_SIGN\tWGS_CHL\tWGS_CHL_SIR\tWGS_RIF_SIGN\tWGS_RIF\tWGS_RIF_SIR\tWGS_VAN_SIGN\tWGS_VAN\tWGS_VAN_SIR\t\
 WGS_DAP_SIGN\tWGS_DAP\tWGS_DAP_SIR\tContig_Num\tN50\tLongest_Contig\tTotal_Bases\tReadPair_1\tContig_Path\n"
 
-# TODO: Enhance logic to remove table if exists and create new TABLE
+# Creates final TABLE file with headers if it doesn't exist. 
+# More logic should be added to main.nf or somewhere else to handle creating a new output file.
 if [[ ! -f "${out_dir}/TABLE_Isolate_Typing_results.txt" ]]; then
     printf "${HEADERS}" > "${out_dir}/TABLE_Isolate_Typing_results.txt"
 fi
@@ -127,3 +126,34 @@ then
 else
     printf "NA\tNA\tNA\tNA\t$readPair_1\tNA\n" >> "$tabl_out"
 fi
+
+cleanup_array=("*.pileup" "*.*sorted.*am" "*.scores" "*ARGannot_r1.*" "ARG-RESFI_fullgenes_results.txt" "BIN_Isolate_Typing_results.txt" "BLACTAM_MIC_RF_with_SIR.txt" "Serotype_Extraction_Sequence.fna" "velvet_qual_metrics.txt" "velvet_output/Sequences" "velvet_output/stats.txt" "velvet_output/Log" "BLACTAM_MIC_RF.txt" "RES-MIC*" "cutadapt_*_R*" "FOLP_target_*" "OUT_*" "TEMP_*" "velvet_output/*Graph*" "PBP_to_MIC_temp/" "*_R1_cut" "*_R2_cut")
+
+#rm *.pileup
+#rm *.*sorted.*am
+#rm *.scores
+#rm *ARGannot_r1.*
+#rm *__genes__*
+#rm *log
+#rm *Results.txt
+#rm ARG-RESFI_fullgenes_results.txt BIN_Isolate_Typing_results.txt BLACTAM_MIC_RF_with_SIR.txt Serotype_Extraction_Sequence.fna velvet_qual_metrics.txt ./velvet_output/Sequences ./velvet_output/stats.txt ./velvet_output/Log BLACTAM_MIC_RF.txt
+#rm RES-MIC*
+#rm cutadapt_*_R*
+#rm FOLP_target_*
+#rm OUT_*
+#rm TEMP_*
+#rm velvet_output/*Graph*
+#rm -r PBP_to_MIC_temp/
+#rm -r *_R1_cut
+#rm -r *_R2_cut
+#RES-MIC* cutadapt_*_R* FOLP_target_* OUT_* TEMP_* velvet_output/*Graph* PBP_to_MIC_temp/ *_R1_cut *_R2_cut
+
+# Add in logic for flag to enable a debug mode that keeps intermediary files
+for i in "${cleanup_array[@]}"
+do
+    # Searches for pattern from cleanup_array (glob incl.) and removes if it exists
+    find "${out_dir}/${sample}" -maxdepth 1 -name "$i" -delete
+done
+echo "Successfully passed cleanup"
+
+exit
