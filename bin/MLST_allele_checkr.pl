@@ -25,7 +25,6 @@ print "MLST_depth is: $MLST_depth\n";
 print "MLST_mismatches: $MLST_mismatch\n\n";
 
 
-
 ###Subroutines###
 sub extractFastaByID {
     my ($lookup, $reference) = @_;
@@ -50,8 +49,6 @@ sub extractFastaByID {
     return $output;
 }
 
-
-
 ###Start Doing Stuff###
 my @mismatch_array = split(';',$MLST_mismatch);
 if (! $MLST_mismatch == 0) {
@@ -74,7 +71,6 @@ if (! $MLST_mismatch == 0) {
 	    (my $MLST_vcf = $MLST_bam) =~ s/\.bam/\.vcf/g;
 	    (my $MLST_fna = $MLST_bam) =~ s/\.bam/\.fna/g;
 	    system("samtools view -b $bam_input $extract_allele > $MLST_bam");
-	    #system("samtools view -h $MLST_bam");
 	    system("samtools index $MLST_bam $MLST_bai");
 	    open ( my $MLST_out, ">", $MLST_fna ) or die "Could not open file $MLST_fna: $!";
 	    my $allele_ref = extractFastaByID($extract_allele,$MLST_ref);
@@ -85,8 +81,6 @@ if (! $MLST_mismatch == 0) {
 	    system("bgzip $MLST_vcf");
 	    system("tabix -p vcf $MLST_vcf.gz");
 	    my $MLST_consensus = `cat $MLST_fna | vcf-consensus $MLST_vcf.gz`;
-	    #print "MLST consensus:\n$MLST_consensus\n\n";
-	    #print "MLST pileup:\n$pileup_allele\n";
 	    print $exFile_out "New MLST Allele Consensus:\n$MLST_consensus\n";
 	    print $exFile_out "New MLST Allele Pileup:\n$pileup_allele\n\n";
 	}
@@ -101,5 +95,3 @@ if (! $MLST_mismatch == 0) {
     # creating output file expected by process extract_MLST.nf
     system("touch Check_Target_Sequence.txt");
 }
-
-#unlink("$MLST_bam");

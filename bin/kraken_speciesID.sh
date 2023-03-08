@@ -3,7 +3,6 @@
 temp_path=$(pwd)
 export PATH=$PATH:$temp_path
 
-#. /usr/share/Modules/init/bash
 ###This script validates the input arguments and creates the job-control.txt file which is needed to submit the qsub array job to the cluster.###
 
 ani_flag=''

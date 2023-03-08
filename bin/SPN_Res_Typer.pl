@@ -289,10 +289,6 @@ sub freebayes_prior_fix {
     return $extractSeq;
 }
 
-
-
-
-
 ###Start Doing Stuff###
 chdir "$outDir";
 my $Res_output = "OUT_Res_Results.txt";
@@ -312,10 +308,8 @@ system("srst2 --samtools_args '\\-A' --input_pe $fastq1 $fastq2 --output $outNam
 system("srst2 --samtools_args '\\-A' --input_pe $fastq1 $fastq2 --output $out_nameARG --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db $ref_dir/ARGannot_r1.fasta");
 ###Type ResFinder Resistance Genes###
 system("srst2 --samtools_args '\\-A' --input_pe $fastq1 $fastq2 --output $out_nameRESFI --log --save_scores --min_coverage 70 --max_divergence 30 --gene_db $ref_dir/ResFinder.fasta");
-###Type FOLP Resistance Gene###
-#system("srst2 --samtools_args '\\-A' --input_pe $fastq1 $fastq2 --output $out_nameFOLP --log --save_scores --min_coverage 95.0 --max_divergence 15 --gene_db $ref_dir/SPN_FOLP_Gene-DB_Final.fasta");
-#=cut
 
+###Type FOLP Resistance Gene###
 my @TEMP_RES_bam = glob("RES_*\.sorted\.bam");
 my @TEMP_RES_fullgene = glob("RES_*__fullgenes__*__results\.txt");
 my $RES_bam = $TEMP_RES_bam[0];
@@ -482,26 +476,6 @@ while(<MYINPUTFILE>) {
                 }
                 $Res_Targets{"ERMB"} = "pos";
             }
-        #} elsif ($miscR_fullgene[3] =~ m/LNU/i) {
-        #    if ($Res_Targets{"LNUB"} eq "neg") {
-        #        if ($drugRes_Col{"EC"} eq "neg") {
-        #            $drugRes_Col{"EC"} = "LNU";
-        #        } else {
-        #            my $new_val = $drugRes_Col{"EC"}.":LNU";
-        #            $drugRes_Col{"EC"} = $new_val;
-        #        }
-        #        $Res_Targets{"LNUB"} = "pos";
-        #    }
-        #} elsif ($miscR_fullgene[3] =~ m/LSA/i) {
-        #    if ($Res_Targets{"LSA"} eq "neg") {
-        #        if ($drugRes_Col{"EC"} eq "neg") {
-        #            $drugRes_Col{"EC"} = "LSA";
-        #        } else {
-        #            my $new_val = $drugRes_Col{"EC"}.":LSA";
-        #            $drugRes_Col{"EC"} = $new_val;
-        #        }
-        #        $Res_Targets{"LSA"} = "pos";
-        #    }
         } elsif ($miscR_fullgene[3] =~ m/MEF/i) {#&& $Res_Targets{"MEF"} eq "neg") {
             if ($Res_Targets{"MEF"} eq "neg") {
                 if ($drugRes_Col{"EC"} eq "neg") {
@@ -585,11 +559,7 @@ if ($Res_Targets{"RPOB"} eq "pos") {
 ###The FOLA-1 marker for tmR resistance may contain mosiac regions and must be extracted from the genome assembly###
 my $REF_seq = extractFastaByID("7__FOLA__FOLA-1__7","$res_DB");
 `echo "$REF_seq" > TEMP_FOLA_Ref.fna`;
-#module "unload perl/5.22.1";
-#module "load perl/5.16.1-MT";
 system("LoTrac_target.pl -1 $fastq1 -2 $fastq2 -q TEMP_FOLA_Ref.fna -S 2.2M -f -n $outName -o $outDir");
-#module "unload perl/5.16.1-MT";
-#module "load perl/5.22.1";
 my $FOLA_file = glob("EXTRACT_*FOLA*.fasta");
 my $FOLA_error = glob("ERROR_*FOLA*.fasta");
 my @FOLA_output;

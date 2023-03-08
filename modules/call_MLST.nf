@@ -21,7 +21,8 @@ process call_MLST {
     --output "${output_dir}/${sample}/MLST_${sample}" --save_scores \
     --mlst_db "${allDB_dir}/Streptococcus_pneumoniae.fasta" \
     --mlst_definitions "${allDB_dir}/spneumoniae.txt" \
-    --min_coverage 99.999
+    --min_coverage 99.999 \
+    --threads 4
     """
 
 }

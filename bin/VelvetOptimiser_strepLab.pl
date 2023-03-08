@@ -260,7 +260,6 @@ for my $thr (threads->list) {
     $thr->join;
 }
 
-
 #now to thaw it all out..
 
 foreach my $key(sort keys %assemblies){
@@ -268,18 +267,7 @@ foreach my $key(sort keys %assemblies){
 	$assembliesObjs{$key} = $obj;
 }
 
-
-#find the best assembly...
-
-#
-#
-#   Now perform a velvetg optimisation based upon the file types sent to velveth
-#
-#
-
-#
-#   get the best assembly so far...
-#
+# Now perform a velvetg optimisation based upon the file types sent to velveth
 
 my $bestId;
 my $maxScore = -100;
@@ -900,16 +888,6 @@ sub insLengthShort {
 	my $len = "auto";
     print STDERR strftime("%b %e %H:%M:%S", localtime), " Setting assembly short insert length(s) to $len\n";
     print $OUT strftime("%b %e %H:%M:%S", localtime), " Setting assembly short insert length(s) to $len\n";
-
-    #re-write the pstringg with the new velvetg command..
-    #my $vg = $ass->{pstringg};
-    #if($vg =~ /ins_length /){
-    #    $vg =~ s/ins_length\s+\d+/ins_length $len/;
-    #}
-    #else {
-    #    $vg .= " -ins_length $len";
-    #}
-    #$ass->{pstringg} = $vg;
 }
 
 

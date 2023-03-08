@@ -1,14 +1,11 @@
 #!/usr/bin/env Rscript
 
 ## Function PBP_AA_TO_MIC2
-
 PBP_AA_TO_MIC2<- function(cwd){
   dbdir=gsub(" ", "", paste(t_path, "/PBP_AA_to_MIC_newDB/"))
   libpath=gsub(" ", "", paste(t_path, "/bin"))
-  #x1=.libPaths()
   x2=c(libpath, "/usr/lib64/R/library", "/usr/share/R/library")
   .libPaths(x2)
-  #.libPaths(c(.libPaths(), libpath))
   library("methods")
   library("randomForest")
   library('iterators')
@@ -61,7 +58,6 @@ PBP_AA_TO_MIC2<- function(cwd){
   m6=m5[, c(2,6,1,3:5, 7:13)]
   x1=colnames(m6)[8:13]
   colnames(m6)[8:13]=paste(x1, "_MIC_MM", sep="")
-  #write.csv(m6, file="Sample_PBPtype_MIC2_Prediction.csv", row.names=F)
   
   BLAclass=c("PEN", "AMO", "MER", "TAX", "CFT", "CFX")
   BKclass1=c(0.06, 2, 0.25, 0.5, 0.5, 0.5)
@@ -81,7 +77,6 @@ PBP_AA_TO_MIC2<- function(cwd){
   colAA=colnames(m1)
   
   m2=read.csv("Sample_PBP_AA_table.csv", colClasses="character")
-  #m2=m2[, c(1, 9:925)]
   colnames(m2)[1]="sampleID"
 
   AF=paste(m2[, 2], m2[, 3], m2[, 4])=="0 0 0"
@@ -140,7 +135,6 @@ PBP_AA_TO_MIC2<- function(cwd){
   m6=m7
   
   #Model fitting Random Forest BK1
-
   RFdbBK1=c("PEN_RandomForestBK1", "AMO_RandomForestBK1", "MER_RandomForestBK1",
 	  "TAX_RandomForestBK1", "CFT_RandomForestBK1", "CFX_RandomForestBK1")  
   m3=m2$sampleID
@@ -161,13 +155,9 @@ PBP_AA_TO_MIC2<- function(cwd){
 }
 
 ## End of Function PBP_AA_TO_MIC2
-
 args <- commandArgs(TRUE)
 cwd = args[1]
 t_path = args[2]
 
 print (cwd)
 PBP_AA_TO_MIC2(cwd)
-
-
-

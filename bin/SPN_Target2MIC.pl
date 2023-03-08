@@ -1,18 +1,15 @@
 #!/usr/bin/env perl
 
 use strict;
-#use warnings;
 use Data::Dumper;
 use Getopt::Long;
 use Getopt::Std;
 use File::Copy qw(copy);
 use File::Copy qw(move);
 use Env;
-#use lib $ENV{MODULESHOME}."/init";
 use Cwd;
 use File::Spec;
 use lib File::Spec->catdir((File::Spec->updir) x 3)."/perl_libs/perl";
-#use perl;
 
 ###Start Doing Stuff###
 my $Res_output = "RES-MIC_".$ARGV[1];

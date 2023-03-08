@@ -19,7 +19,7 @@ process trim_reads {
         mkdir "${output_dir}/${sample}"
     fi
 
-    cutadapt -b file:${script_dir}/SPN-Primers2Trim.fasta \
+    cutadapt -b file:${script_dir}/SPN_Reference_DB/SPN-Primers2Trim.fasta \
     -q 20 --minimum-length 50 \
     --paired-output ${output_dir}/${sample}/cutadapt_${sample}_S1_L001_R2_001.fastq -o ${output_dir}/${sample}/cutadapt_${sample}_S1_L001_R1_001.fastq ${fastq_in.get(0)} ${fastq_in.get(1)}
     """ 

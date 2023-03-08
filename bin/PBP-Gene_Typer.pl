@@ -136,9 +136,6 @@ EOF
 
 my ($help, $fastq1, $fastq2, $PBP_DB, $outDir, $outName, $species, @pbp_input) = checkOptions( @ARGV );
 
-
-
-
 ###SUBROUTINES###
 sub PBP_blastTyper {
     my ($pbp_type,$pbp_name,$pbp_extract) = @_;

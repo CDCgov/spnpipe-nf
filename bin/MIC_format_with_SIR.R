@@ -3,7 +3,6 @@
 MIC_format <- function(PBPtype_MIC2_Prediction)
 {
 
-  
 #PBPtype_MIC2_Prediction="/scicomp/home/yqh8/download/GPS/Spn_Typing_Analysis/NICD_859/SPN_Typing_Output/PBPtoMIC/Sample_PBPtype_MIC2_Prediction.csv"  
   fout=paste(PBPtype_MIC2_Prediction, "MIC_formatted_with_SIR.csv", sep="_")
   m3=read.csv(PBPtype_MIC2_Prediction, colClasses="character")
@@ -215,6 +214,4 @@ MIC_format <- function(PBPtype_MIC2_Prediction)
 args <- commandArgs(TRUE)
 fin = args[1]
 
-#print (c(train_file, cwd))
 MIC_format(fin)
-

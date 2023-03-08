@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 
 ## Function Build_PBP_AA_table
-#datafolder="C:\\Users\\YQH8\\Desktop\\201508\\PBP_MIC_R\\MA616"
 Build_PBP_AA_table<- function(datafolder, temp_path)
 {
 
@@ -12,24 +11,15 @@ Build_PBP_AA_table<- function(datafolder, temp_path)
   #file4: Sample_PBP2X_AA.faa:   containing PBP2X AA sequences from ALL samples 
 
   setwd(datafolder)
-
-  #libpath="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/Rlib"
   libpath=gsub(" ", "", paste(temp_path, "/Rlib"))
-  #x1=.libPaths()
   x2=c(libpath, "/usr/lib64/R/library", "/usr/share/R/library")
   .libPaths(x2)
 
   library("Biostrings")
   
   # Refactored to take in relative path to clustalo binary located in repo
-  #cmd0="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/bin/"
-  #cmd1="clustalo "
-  #cmd1=paste(temp_path, "/clustalo ")
-  #cmd1=gsub(" ", "", paste(temp_path, "/bin/clustalo"))
-  #clean_clustal <- system(paste0("pwd -P ", temp_path))
   clean_clustal <- normalizePath(temp_path)
   print(clean_clustal)
-  #cmd1=gsub(" ", "", paste(clean_clustal, "/bin/clustalo"))
   cmd1="clustalo"    
   print(cmd1)
 
@@ -58,7 +48,6 @@ Build_PBP_AA_table<- function(datafolder, temp_path)
   names(r1)=c("sampleID", "PBP1A_NF", "PBP2B_NF", "PBP2X_NF", x1A,x2B, x2X)
   write.csv(t(r1), file="Ref_PBP_AA_table.csv", row.names=F)
   
-  #seqREF=readAAStringSet("Ref_PBP_3.faa", format="fasta")
   seqREF=readAAStringSet(refPBP3, format="fasta")
     mREF=read.csv("Ref_PBP_AA_table.csv", colClasses="character")
   seq1A=readAAStringSet("Sample_PBP1A_AA.faa", format="fasta")
@@ -95,7 +84,6 @@ Build_PBP_AA_table<- function(datafolder, temp_path)
       test_in = paste0(absoluteDir, "/tempSAM1A.faa")
       test_out = paste0(absoluteDir, "/tempSAM1A.faa.aln")
       s2_args = c('-i', test_in, '-o', test_out, '--wrap=3000', '--force', '--output-order=input-order')
-      #s2_args = c('-i', test_in, '--wrap=3000', '--force', '--output-order=input-order', '>', test_out)
       
       system2(cmd1, s2_args, stdout = TRUE, stderr = TRUE)
       print("RAN clustalo")
@@ -167,7 +155,6 @@ Build_PBP_AA_table<- function(datafolder, temp_path)
       writeXStringSet(seq2B[j1], file="tempSAM1A.faa", , append=T  )
     
       cmd2=" -i tempSAM1A.faa -o tempSAM1A.faa.aln --wrap=3000 --force  --output-order=input-order"
-      #cmd3=paste(cmd0, cmd1, cmd2, sep="")
       cmd3=paste(cmd1, cmd2, sep="")
       system(cmd3)
 
@@ -222,7 +209,6 @@ Build_PBP_AA_table<- function(datafolder, temp_path)
         S2B=rep(NA, width(seqREF["PBP2B_SP0369_AA379-656"])[1])    
     }
 
-##
     NF2X=1
     if (j1 %in% names(seq2X))
     { NF2X=0

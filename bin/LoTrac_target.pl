@@ -1,18 +1,9 @@
 #!/usr/bin/env perl
 
 use strict;
-#use warnings;
 use Data::Dumper;
-#use Getopt::Long;
 use Getopt::Std;
 use File::Basename;
-
-###MODULE LOAD###
-#module load perl/5.12.3
-#module load ncbi-blast+/2.2.29
-#module load BEDTools/2.17.0
-#module load Python/2.7
-#module load prodigal/2.60
 
 sub checkOptions {
     my %opts;
@@ -208,9 +199,6 @@ sub extractFastaByID {
     return $output;
 }
 
-
-
-
 ##Start Doing Stuff##
 chdir "$outDir";
 ###Preprocess with Cutadapt###
@@ -222,8 +210,6 @@ if( -e $fastq1_trimd) {
     print "Beginning cutadapt\n";
     system("cutadapt -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -q 20 --minimum-length 50 --paired-output temp2.fastq -o temp1.fastq $fastq1 $fastq2");
     system("cutadapt -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT -q 20 --minimum-length 50 --paired-output $fastq1_trimd -o $fastq2_trimd temp2.fastq temp1.fastq");
-    #system("cutadapt -b AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -b CTGTCTCTTATA -q 20 --minimum-length 50 --paired-output temp2.fastq -o temp1.fastq $fastq1 $fastq2"); #Removing Nextera#
-    #system("cutadapt -b AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT -b CTGTCTCTTATA -q 20 --minimum-length 50 --paired-output $fastq1_trimd -o $fastq2_trimd temp2.fastq temp1.fastq");
     my $tempDel_1 = "temp1.fastq";
     my $tempDel_2 = "temp2.fastq";
     unlink $tempDel_1;
@@ -235,24 +221,11 @@ if( -d "./velvet_output") {
 } else {
     print "Beginning Velvet\n";
     my $velvetK_val = `velvetk.pl --best --size "$gSize" "$fastq1_trimd" "$fastq2_trimd"`;
-    #`VelvetOptimiser.pl -s "$velvetK_val" -e "$velvetK_val" -o "-scaffolding no" -f "-shortPaired -separate -fastq $fastq1_trimd $fastq2_trimd" -d velvet_output`;  #-c "(Lbp*n50)/ncon"`;
     `VelvetOptimiser_strepLab.pl -c Lbp -s "$velvetK_val" -e "$velvetK_val" -o "-scaffolding no" -f "-shortPaired -separate -fastq $fastq1_trimd $fastq2_trimd" -d velvet_output`;
 }
 
 print "Beginning Prodigal\n";
 # This can break PBP results if pre-existing empty prodigal files exist from velvet error
-# TODO: Adjust logic in cleanup script to remove unecessary intermediary files (can make a flag to keep files such as --debug true)
-
-# Testing for glob break (may return true even if false)
-#if (glob("prodigal_$outName*")) {
-#    print "Gene prediction has already been completed\n";
-#} else {
-#    system("prodigal -c -f gff -i ./velvet_output/contigs.fa -a PRE_$outName.faa -o prodigal_$outName.gff -d PRE_$outName.fasta");
-#    `cat PRE_"$outName".faa | sed 's/ # .*//g' > prodigal_"$outName".faa`;
-#    `cat PRE_"$outName".fasta | sed 's/ # .*//g' > prodigal_"$outName".fna`;
-#    unlink("PRE_$outName.faa");
-#    unlink("PRE_$outName.fasta");
-#}
 system("prodigal -c -f gff -i ./velvet_output/contigs.fa -a PRE_$outName.faa -o prodigal_$outName.gff -d PRE_$outName.fasta");
 `cat PRE_"$outName".faa | sed 's/ # .*//g' > prodigal_"$outName".faa`;
 `cat PRE_"$outName".fasta | sed 's/ # .*//g' > prodigal_"$outName".fna`;
@@ -309,8 +282,6 @@ foreach (@query_names) {
     my $best_name = $bestArray[1];
     my $best_iden = $bestArray[2];
     my $best_len = $bestArray[3];
-    #my $query_strt = $bestArray[6];
-    #my $query_end = $bestArray[7];
     my $match_len = $length * $query_length;
     my $match_iden = $identity * 100;
 
@@ -320,8 +291,6 @@ foreach (@query_names) {
     print "match length threshold: $match_len\n";
 
     if ($best_iden >= $match_iden && $best_len >= $match_len) {
-	#my $prodigal_fna = `extractFastaByID.pl $best_name < prodigal_"$outName".fna`;
-	#my $prodigal_faa = `extractFastaByID.pl $best_name < prodigal_"$outName".faa`;
 	my $prodigal_fna = extractFastaByID($best_name,"prodigal_$outName.fna");
 	my $prodigal_faa = extractFastaByID($best_name,"prodigal_$outName.faa");
 	print $exOUT "$prodigal_fna\n$prodigal_faa\n\n";

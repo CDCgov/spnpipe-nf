@@ -1,7 +1,4 @@
 #!/bin/bash -l
-#source /etc/profile.d/modules.sh
-#module load EMBOSS/6.4.0
-#module load  R/3.3.2
 
 x1="0"
 if [ -d "$1" ]; then
@@ -64,19 +61,11 @@ grep -v ">" temp2.faa >> Sample_PBP2X_AA.faa
 
 rm -f temp*
 
-#
-#scr1="/scicomp/groups/OID/NCIRD/DBD/RDB/Strep_Lab/External/share/PBP_AA_to_MIC/scripts/AAtoMICwrapper_2.sh"
-#bash $scr1 $AAseqDir
 # Refactored to place dependencies locally 
 temp_path=$2
-#bash "$temp_path/AAtoMICwrapper_2.sh" "$AAseqDir" "$temp_path"
 bash "AAtoMICwrapper_2.sh" "$AAseqDir" "$temp_path"
 
-# Use Aspen Cluster to run; BioLinux will not work
 fin="$AAseqDir"/Sample_PBPtype_MIC2_Prediction.csv
-
-#scr1="$temp_path/bin/MIC_format_with_SIR.R"
-#Rscript $scr1 $fin
 
 MIC_format_with_SIR.R $fin
 
@@ -105,6 +94,3 @@ paste -d ' ' temp1.txt temp2.txt>"$d1""/BLACTAM_MIC_RF_with_SIR.txt"
 echo "BLACTAM MIC output file:" "$d1""/BLACTAM_MIC_RF_with_SIR.txt"
 
 rm -f temp* 
-#rm -rf $AAseqDir
-
-#module unload EMBOSS/6.4.0
