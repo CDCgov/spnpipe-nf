@@ -13,11 +13,11 @@ It requires Bash 3.2 (or later) and Java 11 (or later, up to 18) to be installed
 
 Install easily by following below commands to; 
 1) Download/configure NextFlow
-2) Make the `nextflow` binary executable
+2) Make the `nextflow` binary executable  
 3) Move `nextflow` binary to a directory within your `$PATH` (/usr/bin or other)  
 
 `wget -qO- https://get.nextflow.io | bash`  
-`chmod +x nextflow` 
+`chmod +x nextflow`  
 `cp nextflow </path/in/your/$PATH>` 
 
 ## Docker Installation
