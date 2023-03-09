@@ -30,6 +30,8 @@ workflow {
       out_dir.mkdir()
     }
 
+    results_dir = file(params.results_dir)
+
     raw_reads = params.read_dir
     
     Channel
@@ -42,19 +44,19 @@ workflow {
         // can execute module/process here that checks for latest SPN_Reference_DB
     //    }
 
-    trim_reads(SPNtyping_input_file_ch, params.results_dir, params.script_dir)
-    fastqc_trimmed(trim_reads.out.fastq, params.results_dir)
+    trim_reads(SPNtyping_input_file_ch, results_dir, params.script_dir)
+    fastqc_trimmed(trim_reads.out.fastq, results_dir)
     
-    call_MLST(trim_reads.out.fastq, params.results_dir, params.db_dir)
-    extract_MLST(call_MLST.out, params.results_dir, params.db_dir, params.script_dir)
+    call_MLST(trim_reads.out.fastq, results_dir, params.db_dir)
+    extract_MLST(call_MLST.out, results_dir, params.db_dir, params.script_dir)
     
-    call_SPNserotype(trim_reads.out.fastq, params.results_dir, params.db_dir, params.script_dir)
+    call_SPNserotype(trim_reads.out.fastq, results_dir, params.db_dir, params.script_dir)
 
-    call_PBPgenetype(trim_reads.out.fastq, params.results_dir, params.db_dir, params.script_dir)
-    predict_bL_MIC(call_PBPgenetype.out.pbp_extract, params.results_dir, params.script_dir)
+    call_PBPgenetype(trim_reads.out.fastq, results_dir, params.db_dir, params.script_dir)
+    predict_bL_MIC(call_PBPgenetype.out.pbp_extract, results_dir, params.script_dir)
 
-    call_SPNrestype(trim_reads.out.fastq, params.results_dir, params.db_dir, params.script_dir)
-    target2MIC_SPNrestype(call_SPNrestype.out.spn_res, params.results_dir, params.script_dir)
+    call_SPNrestype(trim_reads.out.fastq, results_dir, params.db_dir, params.script_dir)
+    target2MIC_SPNrestype(call_SPNrestype.out.spn_res, results_dir, params.script_dir)
 
     // Group key outputs into single channel for cleanup_results to trigger
     // Join needs a common key (aka input manifest) but is using val(sample) for now
@@ -63,5 +65,5 @@ workflow {
       .join(predict_bL_MIC.out)
       .join(target2MIC_SPNrestype.out)
     
-    cleanup_results(all_results, params.results_dir)   
+    cleanup_results(all_results, results_dir)   
 }
