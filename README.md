@@ -1,92 +1,54 @@
-# SPN NextFlow Pipeline Test Useage
+# SPN NextFlow Pipeline
+
+## Overview  
+
+This project is an ongoing effort to create a unified _Streptococcus pneumoniae_ isolate and filtered-read identification + characterization pipeline. Each sample is characterized by assembly metrics, serotype, MLST and AMR predictions with an emphasis on beta-lactamase resistance genes. The original SPN pipeline, developed by the Strep Lab at the CDC, was refactored for env independence. NextFlow is the workflow manager used to create distinct analysis "modules" wrapped around custom Docker images to maintain software versions for all users. Most relatively modern consumer-level computers can run this pipeline as long as NextFlow and Docker are installed. 
+
+Original SPN pipeline developed by [Ben Metcalf](https://github.com/BenJamesMetcalf/Spn_Scripts_Reference).
 
 ## NextFlow Installation
 Requirements (from https://www.nextflow.io/docs/latest/getstarted.html);  
 Nextflow can be used on any POSIX compatible system (Linux, OS X, etc).  
 It requires Bash 3.2 (or later) and Java 11 (or later, up to 18) to be installed.  
 
-Install easily by downloading the necessary files, and then moving the `nextflow` binary to a directory within your `$PATH` (/usr/bin or other);  
+Install easily by following below commands to; 
+1) Download/configure NextFlow
+2) Make the `nextflow` binary executable
+3) Move `nextflow` binary to a directory within your `$PATH` (/usr/bin or other)  
+
 `wget -qO- https://get.nextflow.io | bash`  
 `chmod +x nextflow` 
+`cp nextflow </path/in/your/$PATH>` 
 
 ## Docker Installation
-Please follow install instructions on https://docs.docker.com/engine/install/ pertaining to your Linux distribution (CentOS, RedHat, Ubuntu, etc.)
-
-## Setup
-Alter the nextflow.config file with correct full paths to the following;  
-NOTE: You can alter these paths as long as they point to the correct resources (results_dir needs a blank output dir)   
-`params {`    
-    `read_dir = "<full_path_with_raw_reads>"`  
-    `results_dir = "<full_path_to_git_repo>/test_out"`  
-    `script_dir = "<full_path_to_git_repo>/spnpipelinecontainer"`  
-    `db_dir = "<full_path_to_git_repo>/spnpipelinecontainer/SPN_Reference_DB"`  
-`}`  
-  
-NextFlow automatically parses read pairs into distinct results folder, so for testing this branch;  
-The pipeline expects Illumina format PE raw reads `*R[1,2]_001.fastq.gz` within `read_dir`  
+Please follow install instructions on https://docs.docker.com/engine/install/ pertaining to your Linux/WSL or MacOS distribution 
 
 ## Usage  
-Run the following command and you should begin to see processes queue on your screen. 
-`nextflow run main.nf`   
+Ensure Docker is running by entering `docker --version` in your command line interface. 
+
+Input is expected as Illumina format paired-end raw reads `*R[1,2]_001.fastq.gz` or `*_{1,2}.fastq.gz` within `read_dir` 
+
+Provide your local directories as CLI arguments to run the pipeline;  
+```
+nextflow run main.nf --read_dir </input/path> --results_dir </output/path> --script_dir </path/to/spnpipe-nf> --db_dir </path/to/spnpipe-nf/SPN_Reference_DB/>  
+```
+`--read_dir` is the path of your input raw reads  
+`--results_dir` is the path specified for output results  
+`--script_dir` is the path where this repository lives in your local machine  
+`--db_dir` is the path where the reference database lives 
+
+You should now see processes generate in your terminal.
+
 When the pipeline is complete, you should be able to find: `TABLE_Isolate_Typing_results.txt` within your specified `results_dir`  
 
-NextFlow produces many intermediary files within it's default work directory. To remove them and free space on your system, you should use `nextflow clean -f` command to remove the latest run.  
+**Notes:**
+- NextFlow produces many intermediary files within it's default work directory. To remove them and free space on your system, you should use `nextflow clean -f` command to remove the latest run.  
+- It can be useful to look through a work directory to see logs produced by NextFlow (use `ls -a`)  
+- To resume analysis using cached data stored in existing work directories: `nextflow run main.nf -resume`   
+ 
+## Contributing + Standard Notices
+To contribute, please refer to [contributing to this repository](https://github.com/CDCgov/template/blob/master/CONTRIBUTING.md).  
 
-It can be useful to look through a work directory to see logs produced by NextFlow (use `ls -a`)  
-To resume analysis using cached data stored in existing work directories: `nextflow run main.nf -resume`   
-  
-## Public Domain Standard Notice
-This repository constitutes a work of the United States Government and is not
-subject to domestic copyright protection under 17 USC § 105. This repository is in
-the public domain within the United States, and copyright and related rights in
-the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
-All contributions to this repository will be released under the CC0 dedication. By
-submitting a pull request you are agreeing to comply with this waiver of
-copyright interest.
 
-## License Standard Notice
-The repository utilizes code licensed under the terms of the Apache Software
-License and therefore is licensed under ASL v2 or later.
-
-This source code in this repository is free: you can redistribute it and/or modify it under
-the terms of the Apache Software License version 2, or (at your option) any
-later version.
-
-This source code in this repository is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the Apache Software License for more details.
-
-You should have received a copy of the Apache Software License along with this
-program. If not, see http://www.apache.org/licenses/LICENSE-2.0.html
-
-The source code forked from other open source projects will inherit its license.
-
-## Privacy Standard Notice
-This repository contains only non-sensitive, publicly available data and
-information. All material and community participation is covered by the
-[Disclaimer](https://github.com/CDCgov/template/blob/master/DISCLAIMER.md)
-and [Code of Conduct](https://github.com/CDCgov/template/blob/master/code-of-conduct.md).
-For more information about CDC's privacy policy, please visit [http://www.cdc.gov/other/privacy.html](https://www.cdc.gov/other/privacy.html).
-
-## Contributing Standard Notice
-Anyone is encouraged to contribute to the repository by [forking](https://help.github.com/articles/fork-a-repo)
-and submitting a pull request. (If you are new to GitHub, you might start with a
-[basic tutorial](https://help.github.com/articles/set-up-git).) By contributing
-to this project, you grant a world-wide, royalty-free, perpetual, irrevocable,
-non-exclusive, transferable license to all users under the terms of the
-[Apache Software License v2](http://www.apache.org/licenses/LICENSE-2.0.html) or
-later.
-
-All comments, messages, pull requests, and other submissions received through
-CDC including this GitHub page may be subject to applicable federal law, including but not limited to the Federal Records Act, and may be archived. Learn more at [http://www.cdc.gov/other/privacy.html](http://www.cdc.gov/other/privacy.html).
-
-## Records Management Standard Notice
-This repository is not a source of government records, but is a copy to increase
-collaboration and collaborative potential. All government records will be
-published through the [CDC web site](http://www.cdc.gov).
-
-## Additional Standard Notices
-Please refer to [CDC's Template Repository](https://github.com/CDCgov/template)
-for more information about [contributing to this repository](https://github.com/CDCgov/template/blob/master/CONTRIBUTING.md),
-[public domain notices and disclaimers](https://github.com/CDCgov/template/blob/master/DISCLAIMER.md),
-and [code of conduct](https://github.com/CDCgov/template/blob/master/code-of-conduct.md).
+[public domain notices and disclaimers](https://github.com/CDCgov/template/blob/master/DISCLAIMER.md)  
+[code of conduct](https://github.com/CDCgov/template/blob/master/code-of-conduct.md)
