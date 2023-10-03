@@ -1,6 +1,6 @@
 process target2MIC_SPNrestype {
     
-    container 'dreramos/spn:v04'
+    container 'glevdoug/spn:v06'
     containerOptions = "--user root"
 
     input:
