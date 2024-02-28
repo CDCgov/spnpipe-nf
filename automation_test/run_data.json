@@ -1,5 +1,9 @@
 {"run_data": [
-  { "filename": "1.txt", "last_commit_date": "2024-02-15 06:04:48 -0800" }
+  { "filename": "ARGannot_r1.fasta", "last_commit_date": "2024-02-28 02:16:55 -0800" }
 ,
-  { "filename": "2.txt", "last_commit_date": "2024-02-15 06:05:01 -0800" }
+  { "filename": "ARGannot_r1.fasta.1.bt2", "last_commit_date": "2022-10-10 16:21:31 -0400" }
+,
+  { "filename": "ARGannot_r1.fasta.2.bt2", "last_commit_date": "2022-10-10 16:21:31 -0400" }
+,
+  { "filename": "ResFinder.fasta", "last_commit_date": "2024-02-28 02:17:56 -0800" }
 ]}
